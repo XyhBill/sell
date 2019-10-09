@@ -23,12 +23,12 @@ import java.util.List;
 public class OrderForm2OrderDTOConverter {
     public static OrderDTO convert(OrderForm orderForm){
         Gson gson = new Gson();
-        OrderDTO orderDTO = new OrderDTO();
+        OrderDTO orderDT = new OrderDTO();
 
-        orderDTO.setBuyerName(orderForm.getName());
-        orderDTO.setBuyerPhone(orderForm.getPhone());
-        orderDTO.setBuyerAddress(orderForm.getAddress());
-        orderDTO.setBuyerOpenid(orderForm.getOpenId());
+        orderDT.setBuyerName(orderForm.getName());
+        orderDT.setBuyerPhone(orderForm.getPhone());
+        orderDT.setBuyerAddress(orderForm.getAddress());
+        orderDT.setBuyerOpenid(orderForm.getOpenId());
         List<OrderDetail> orderDetailList = new ArrayList<>();
         try {
             gson.fromJson(orderForm.getItems() , new TypeToken<List<OrderDetail>>(){}.getType());
@@ -36,8 +36,8 @@ public class OrderForm2OrderDTOConverter {
             log.error("【对象转换】 错误, string={}",orderForm.getItems());
             throw new SellException(ResultEnum.PARAM_ERROR);
         }
-        orderDTO.setOrderDetailList(orderDetailList);
+        orderDT.setOrderDetailList(orderDetailList);
 
-        return orderDTO;
+        return orderDT;
     }
 }
