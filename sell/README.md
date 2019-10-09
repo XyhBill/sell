@@ -1,2 +1,0 @@
-# sell
-WeChat Ordering system
