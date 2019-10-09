@@ -37,7 +37,7 @@ public class BuyerController {
     public ResultVO<Map<String , String>> create(@Valid OrderForm orderForm , BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             log.error("【创建订单】 参数不正确 , orderForm={}",orderForm);
-            throw new SellException(ResultEnum.PARAM_ERROE.getCode(),bindingResult.getFieldError().getDefaultMessage());
+            throw new SellException(ResultEnum.PARAM_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
         OrderDTO orderDTO = OrderForm2OrderDTOConverter.convert(orderForm);
         if (CollectionUtils.isEmpty(orderDTO.getOrderDetailList())){
