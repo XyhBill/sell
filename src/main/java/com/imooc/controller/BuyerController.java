@@ -10,14 +10,17 @@ import com.imooc.service.OrderService;
 import com.imooc.utils.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,12 +31,13 @@ import java.util.Map;
  * Version 1.0
  **/
 @RestController
-@RequestMapping("/buyer/order")
+@RequestMapping(value = "/buyer/order" , method = RequestMethod.GET)
 @Slf4j
 public class BuyerController {
     @Autowired
     private OrderService orderService;
     // 创建订单
+    @PostMapping("/create")
     public ResultVO<Map<String , String>> create(@Valid OrderForm orderForm , BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             log.error("【创建订单】 参数不正确 , orderForm={}",orderForm);
@@ -50,7 +54,18 @@ public class BuyerController {
         return ResultVOUtil.success(map);
     }
     // 订单列表
-
+    @GetMapping("/list")
+    public ResultVO<List<OrderDTO>> list(@RequestParam("openId") String openId,
+                                         @RequestParam(value = "page" , defaultValue = "0") Integer page,
+                                         @RequestParam(value = "size", defaultValue = "10") Integer size){
+        if (StringUtils.isEmpty(openId)){
+            log.error("【查询订单列表】 openId为空");
+            throw  new SellException(ResultEnum.PARAM_ERROR);
+        }
+        PageRequest request = new PageRequest(page,size);
+        Page<OrderDTO> orderDTOPage = orderService.findList(openId,request);
+        return ResultVOUtil.success(orderDTOPage.getContent());
+    }
     // 订单详情
 
     // 取消订单
