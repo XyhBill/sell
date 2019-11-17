@@ -1,6 +1,7 @@
 package com.imooc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.imooc.dataobject.OrderDetail;
 import com.imooc.enums.OrderStatusEnum;
@@ -21,7 +22,6 @@ import java.util.List;
  * Version 1.0
  **/
 @Data
-//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDTO {
 
