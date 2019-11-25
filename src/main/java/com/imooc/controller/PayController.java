@@ -4,22 +4,31 @@ import com.imooc.dto.OrderDTO;
 import com.imooc.enums.ResultEnum;
 import com.imooc.exception.SellException;
 import com.imooc.service.OrderService;
+import com.imooc.service.PayService;
+import com.lly835.bestpay.model.PayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/pay")
 public class PayController {
-    //因为需要查询订单 所以导入订单所需的servvice
+    //因为需要查询订单 所以导入订单所需的service
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private PayService payService;
+
     @GetMapping("/create")
-    public void create(@RequestParam("orderId") String orderId ,
-                                    @RequestParam("returnUrl") String returnUrl){
+    public ModelAndView create(@RequestParam("orderId") String orderId ,
+                               @RequestParam("returnUrl") String returnUrl ,
+                               Map<Object , String> map){
 
         //1.查询订单
         OrderDTO orderDTO = orderService.findOne(orderId);
@@ -28,7 +37,10 @@ public class PayController {
         }
 
         //2.发起支付，将逻辑都写在PayService中
+        PayResponse payResponse = payService.create(orderDTO);
 
 
+
+        return new ModelAndView("pay/create");
     }
 }
